@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: voucher_campaign_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: voucher_campaign
+      MYSQL_USER: voucher_user
+      MYSQL_PASSWORD: voucher_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - voucher_network
+
+  # Node.js Application
+  app:
+    build: .
+    container_name: voucher_campaign_api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=voucher_user
+      - DB_PASSWORD=voucher_password
+      - DB_NAME=voucher_campaign
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - voucher_network
+
+volumes:
+  mysql_data:
+
+networks:
+  voucher_network:
+    driver: bridge
