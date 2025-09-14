@@ -1,6 +1,6 @@
-import { VoucherCsvRow, VoucherForCSV } from '../types';
+import { VoucherCsvRow, VoucherCSV } from '../types';
 
-const vouchersToCsvData = (vouchers: VoucherForCSV[]): VoucherCsvRow[] => (
+const vouchersToCsvData = (vouchers: VoucherCSV[]): VoucherCsvRow[] => (
     vouchers.map(({ id, code, isUsed, usedAt, createdAt }) => ({
         id,
         code,
@@ -19,7 +19,7 @@ const formatDate = (isoString: string) => {
     }
 };
 
-export const generateVoucherCsvInMemory = (vouchers: VoucherForCSV[]): string => {
+export const generateVoucherCsvInMemory = (vouchers: VoucherCSV[]): string => {
     const csvData = vouchersToCsvData(vouchers);
 
     const header = 'ID,Voucher Code,Used,Used At,Created At\n';
